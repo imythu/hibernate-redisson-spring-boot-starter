@@ -3,16 +3,17 @@ package cn.inusha.hibernate.redisson.spring.boot.starter.factory;
 import org.redisson.api.RedissonClient;
 import org.redisson.hibernate.JndiRedissonRegionFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.lang.Nullable;
 
 import java.util.Map;
 
 /**
  * @author InuYasha
  */
-public class SpringJndiRedissonRegionFactory extends JndiRedissonRegionFactory implements BeanFactoryAware {
-    private static BeanFactory beanFactory;
+public class SpringJndiRedissonRegionFactory extends JndiRedissonRegionFactory implements BeanFactoryPostProcessor {
+    private static ConfigurableListableBeanFactory beanFactory;
 
     @Override
     protected RedissonClient createRedissonClient(Map properties) {
@@ -20,7 +21,8 @@ public class SpringJndiRedissonRegionFactory extends JndiRedissonRegionFactory i
     }
 
     @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        SpringJndiRedissonRegionFactory.beanFactory = beanFactory;
+    public void postProcessBeanFactory(
+            @Nullable ConfigurableListableBeanFactory configurableListableBeanFactory) throws BeansException {
+        SpringJndiRedissonRegionFactory.beanFactory = configurableListableBeanFactory;
     }
 }

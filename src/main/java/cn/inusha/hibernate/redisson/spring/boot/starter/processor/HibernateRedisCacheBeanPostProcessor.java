@@ -6,6 +6,7 @@ import cn.inusha.hibernate.redisson.spring.boot.starter.properties.FactoryTypePr
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
+import org.springframework.lang.Nullable;
 
 /**
  * @author InuYasha
@@ -19,17 +20,16 @@ public class HibernateRedisCacheBeanPostProcessor implements BeanPostProcessor {
     }
 
     @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+    public Object postProcessAfterInitialization(
+            @Nullable Object bean,
+            @Nullable String beanName) throws BeansException {
         if (bean instanceof JpaProperties) {
             JpaProperties jpaProperties = (JpaProperties) bean;
-            String factoryClass = jpaProperties.getProperties().get(HIBERNATE_SECOND_LEVEL_CACHE_KEY);
-            if (factoryClass == null) {
-                jpaProperties.getProperties()
-                        .put(HIBERNATE_SECOND_LEVEL_CACHE_KEY,
-                                factoryTypeProperties.getFactoryClass().equals(FactoryTypeProperties.FactoryClass.jndiFactory)
-                                        ? SpringJndiRedissonRegionFactory.class.getName() : SpringRedissonRegionFactory.class.getName()
-                        );
-            }
+            jpaProperties.getProperties()
+                    .computeIfAbsent(HIBERNATE_SECOND_LEVEL_CACHE_KEY,
+                            k -> factoryTypeProperties.getFactoryClass().equals(FactoryTypeProperties.FactoryClass.jndiFactory)
+                                    ? SpringJndiRedissonRegionFactory.class.getName() : SpringRedissonRegionFactory.class.getName()
+                    );
         }
         return bean;
     }
