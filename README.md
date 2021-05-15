@@ -8,3 +8,41 @@
 创建 `entityManagerFactory` 这个 bean 的时候会创建二级缓存需要的缓存提供器，
 这时候通过 beanFactory 去取 `org.redisson.api.RedissonClient` bean，这个时候
 `org.redisson.api.RedissonClient` bean 还没创建，这个时候就会创建这个 bean，创建完后返回。
+
+### 使用
+- 引入依赖即可
+```xml
+<dependency>
+    <groupId>cn.inusha</groupId>
+    <artifactId>hibernate-redisson-spring-boot-starter</artifactId>
+    <version>1.0.1</version>
+</dependency>
+```
+
+- redisson-hibernate 依赖关系
+```xml
+     <dependency>
+         <groupId>org.redisson</groupId>
+         <!-- for Hibernate v4.x -->
+         <artifactId>redisson-hibernate-4</artifactId>
+         <!-- for Hibernate v5.0.x - v5.1.x -->
+         <artifactId>redisson-hibernate-5</artifactId>
+         <!-- for Hibernate v5.2.x -->
+         <artifactId>redisson-hibernate-52</artifactId>
+         <!-- for Hibernate v5.3.3+ - v5.4.x -->
+         <artifactId>redisson-hibernate-53</artifactId>
+         <version>3.15.5</version>
+     </dependency>
+```
+- redisson-spring-boot-starter 依赖需要的 redisson-spring-data-xx 和 spring 关系
+
+|redisson-spring-data<br/>module name|Spring Boot<br/>version|
+|----------------------------|-------------------|
+|redisson-spring-data-16     |1.3.x              |
+|redisson-spring-data-17     |1.4.x              |
+|redisson-spring-data-18     |1.5.x              |
+|redisson-spring-data-20     |2.0.x              |
+|redisson-spring-data-21     |2.1.x              |
+|redisson-spring-data-22     |2.2.x              |
+|redisson-spring-data-23     |2.3.x              |
+|redisson-spring-data-24     |2.4.x              |
